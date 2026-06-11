@@ -126,9 +126,17 @@ const renderGame = (()=>  {
             gameboardDiv.appendChild(div)
             div.classList.add("gameboardDiv");
             div.addEventListener("click", () => {
-                game.playerOne.setMarker(i + 1)
-                div.textContent = `${game.playerOne.playerMarker}`
-                test();
+                if (game.activePlayer.test == game.playerTwo){
+                    game.playerOne.setMarker(i + 1);
+                    div.textContent = `${game.activePlayer.test.playerMarker}`
+                    test()
+                } else{
+                    game.playerTwo.setMarker(i + 1);
+                    div.textContent = `${game.activePlayer.test.playerMarker}`
+                    console.log(game.playerOne)
+                    test();
+                }
+                
             });   
         };
     })();
