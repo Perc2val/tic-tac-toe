@@ -9,9 +9,10 @@ const game = (()=> {
 
     (function (){ 
     return gameboard = {
-            board: ["","","","","","","","",""]
+            board: ["","","","","","","","",""],
             
-        }
+    }
+    
     })();
 
     (function(){
@@ -23,6 +24,12 @@ const game = (()=> {
             }
         }
     })();
+
+    let checkSubset = (parentArray, subsetArray) => {
+            return subsetArray.every((el) => {
+                return parentArray.includes(el)
+            })
+    }
 
     console.log(gameboard.board)
 
@@ -41,6 +48,7 @@ const game = (()=> {
                 console.log(gameboard.board)
             }
         }
+
         function getPlayerMarkerPosition(){
             playerMarkerPosition.length = 0;
             let idx = gameboard.board.indexOf(playerMarker);
@@ -50,6 +58,7 @@ const game = (()=> {
             }  
             console.log(playerMarkerPosition);
         }
+
         function checkWinner(){
             /*const winningConditions = (["0","1","2"]["0","3","6"]["1","4","7"]["3","4","5"]["2","5","8"]["6","7","8"]["0","4","8"]["6","4","2"])*/
             const winningConditions ={
@@ -61,24 +70,29 @@ const game = (()=> {
                 winSix:[6,7,8],
                 winSeven:[0,4,8],
                 winEight:[6,4,2]}
-            if (winningConditions.winOne.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winTwo.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winThree.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winFour.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winFive.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winSix.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winSeven.toString() == playerMarkerPosition.toString() ||
-                winningConditions.winEight.toString() == playerMarkerPosition.toString()){
-                console.log(`${playerName} won with the winning combination ${winningConditions.winOne}`)
+            if (checkSubset(playerMarkerPosition, winningConditions.winOne) ||
+                checkSubset(playerMarkerPosition, winningConditions.winTwo) ||
+                checkSubset(playerMarkerPosition, winningConditions.winThree) ||
+                checkSubset(playerMarkerPosition, winningConditions.winFour) ||
+                checkSubset(playerMarkerPosition, winningConditions.winFive) ||
+                checkSubset(playerMarkerPosition, winningConditions.winSix) ||
+                checkSubset(playerMarkerPosition, winningConditions.winSeven) ||
+                checkSubset(playerMarkerPosition, winningConditions.winEight) 
+            ){
+                console.log(`${playerName} won `)
             } else {
                 gameFlow();
             }
         }
 
-        return {
-            playerName, playerMarker, setMarker, playerMarkerPosition,
+        function resetGame(){
+            gameboard.board
         }
-    }
+
+        return {
+            playerName, playerMarker, setMarker,
+        }
+    }   
 
     
     
@@ -91,3 +105,4 @@ const game = (()=> {
         playerOne, playerTwo,
     }
 })();
+
