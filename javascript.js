@@ -6,21 +6,26 @@
 /* objects for the players with functions for X and O*/
 
 const game = (()=> {
-
+    
     (function (){ 
-    return gameboard = {
+        return gameboard = {
             board: ["","","","","","","","",""],
             
     }
-    
     })();
-
+    (function (){
+        return activePlayer = {
+            test: ""
+        }
+    })();
     (function(){
         return gameFlow = function(){
             if(gameboard.board.filter(e => e == "X").length === gameboard.board.filter(e => e == "O").length){
+                game.activePlayer.test = game.playerOne
                 console.log("Its player one turn")
             } else {
                 console.log("Its player two turn")
+                game.activePlayer.test = game.playerTwo
             }
         }
     })();
@@ -34,7 +39,7 @@ const game = (()=> {
     console.log(gameboard.board)
 
     function createPlayer(givenName, marker){
-        const playerName = givenName;
+        let playerName = givenName;
         const playerMarker = marker;
         const playerMarkerPosition = []; 
         const setMarker = function(position){
@@ -80,17 +85,21 @@ const game = (()=> {
                 checkSubset(playerMarkerPosition, winningConditions.winEight) 
             ){
                 console.log(`${playerName} won `)
+                resetGame();
             } else {
                 gameFlow();
             }
         }
 
         function resetGame(){
-            gameboard.board
+            gameboard.board = ["","","","","","","","",""];
+            playerName = "";
+            playerMarkerPosition.length = 0;
+            console.log(gameboard.board);
         }
 
         return {
-            playerName, playerMarker, setMarker,
+            playerName, playerMarker, setMarker, 
         }
     }   
 
@@ -102,7 +111,29 @@ const game = (()=> {
     const playerTwo = createPlayer("Charly", "O")
 
     return {
-        playerOne, playerTwo,
+        playerOne, playerTwo, gameboard, activePlayer
     }
 })();
 
+const renderGame = (()=>  {
+    const body = document.querySelector("body");
+    const gameboardDiv = document.createElement("div");
+    gameboardDiv.classList.add("gameboard")
+    body.appendChild(gameboardDiv);
+    const renderGameBoard = (()=> {
+        for(let i = 0; i < 9; i++){
+            const div = document.createElement("div");
+            gameboardDiv.appendChild(div)
+            div.classList.add("gameboardDiv");
+            div.addEventListener("click", () => {
+                game.playerOne.setMarker(i + 1)
+                div.textContent = `${game.playerOne.playerMarker}`
+                test();
+            });   
+        };
+    })();
+})();
+
+function test(){
+    console.log(game.activePlayer.test)
+}
