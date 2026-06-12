@@ -67,8 +67,9 @@ const game = (()=> {
             console.log(playerMarkerPosition);
         }
 
-        function checkWinner(){
+        const checkWinner = function(){
             /*const winningConditions = (["0","1","2"]["0","3","6"]["1","4","7"]["3","4","5"]["2","5","8"]["6","7","8"]["0","4","8"]["6","4","2"])*/
+            
             const winningConditions ={
                 winOne:[0,1,2],
                 winTwo:[0,3,6],
@@ -89,6 +90,9 @@ const game = (()=> {
             ){
                 console.log(`${game.activePlayer.inactiv.playerName} won `)
                 gameFlow()
+                renderGame.renderWinningMessage();
+                resetGame();
+                renderGame.resetRenderGame();
             } else {
                 gameFlow();
             }
@@ -102,7 +106,7 @@ const game = (()=> {
         };
 
         return {
-            playerName, playerMarker, setMarker, resetGame
+            playerName, playerMarker, setMarker, resetGame, checkWinner
         }
     }   
 
@@ -121,8 +125,15 @@ const game = (()=> {
 const renderGame = (()=>  {
     const body = document.querySelector("body");
     const gameboardDiv = document.createElement("div");
-    gameboardDiv.classList.add("gameboard")
+    gameboardDiv.classList.add("gameboard");
+    const winningMessage = document.createElement("p");
+    body.appendChild(winningMessage);
     body.appendChild(gameboardDiv);
+    const renderWinningMessage = function(){
+        
+        winningMessage.textContent = `${game.activePlayer.activ.playerName} won the last game`
+    }
+    
 
 
     function renderGameBoard(){
@@ -163,15 +174,19 @@ const renderGame = (()=>  {
         playerOneName.value = "";
         playerTwoName.value = "";
     })
-    resetGameButton.addEventListener("click", ()=>{
+
+    const resetRenderGame = function(){
         game.playerOne.resetGame();
         game.playerTwo.resetGame();
         game.gameFlow();
         while (gameboardDiv.firstChild) {
             gameboardDiv.removeChild(gameboardDiv.firstChild);
         }
-
-    })
+    }
+    resetGameButton.addEventListener("click", resetRenderGame)
+    return{
+        renderWinningMessage, resetRenderGame,
+    }
 })();
 
 
