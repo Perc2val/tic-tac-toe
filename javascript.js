@@ -24,9 +24,7 @@ const game = (()=> {
             if(gameboard.board.filter(e => e == "X").length === gameboard.board.filter(e => e == "O").length){
                 game.activePlayer.activ = game.playerTwo
                 game.activePlayer.inactiv = game.playerOne
-                console.log("Its player one turn")
             } else {
-                console.log("Its player two turn")
                 game.activePlayer.activ = game.playerOne
                 game.activePlayer.inactiv = game.playerTwo
             }
@@ -48,12 +46,10 @@ const game = (()=> {
         const setMarker = function(position){
             if (gameboard.board[position-1]== ""){
                 gameboard.board[position - 1] = marker;
-                console.log(gameboard.board);
                 getPlayerMarkerPosition();
                 checkWinner();
             } else {
-                console.log("You cant place your marker there")
-                console.log(gameboard.board)
+                return
             }
         }
 
@@ -64,7 +60,7 @@ const game = (()=> {
                 playerMarkerPosition.push(idx);
                 idx = gameboard.board.indexOf(playerMarker, idx + 1);
             }  
-            console.log(playerMarkerPosition);
+          
         }
 
         const checkWinner = function(){
@@ -88,7 +84,6 @@ const game = (()=> {
                 checkSubset(playerMarkerPosition, winningConditions.winSeven) ||
                 checkSubset(playerMarkerPosition, winningConditions.winEight) 
             ){
-                console.log(`${game.activePlayer.inactiv.playerName} won `)
                 gameFlow()
                 renderGame.renderWinningMessage();
                 resetGame();
@@ -102,7 +97,6 @@ const game = (()=> {
             gameboard.board = ["","","","","","","","",""];
             playerName = "";
             playerMarkerPosition.length = 0;
-            console.log(gameboard.board);
         };
 
         return {
@@ -161,9 +155,7 @@ const renderGame = (()=>  {
     const resetGameButton = document.querySelector(".reset")
     startGame.addEventListener("click", ()=> {
         game.playerOne.playerName = playerOneName.value;
-        console.log(playerOneName.value)
         game.playerTwo.playerName = playerTwoName.value;
-        console.log(playerTwoName.value)
         if (playerOneName.value.length != 0 && playerTwoName.value.length != 0){
             renderGameBoard();
         } else {
