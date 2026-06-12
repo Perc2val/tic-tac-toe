@@ -15,17 +15,20 @@ const game = (()=> {
     })();
     (function (){
         return activePlayer = {
-            test: ""
+            activ: "",
+            inactiv: "",
         }
     })();
     (function(){
         return gameFlow = function(){
             if(gameboard.board.filter(e => e == "X").length === gameboard.board.filter(e => e == "O").length){
-                game.activePlayer.test = game.playerOne
+                game.activePlayer.activ = game.playerTwo
+                game.activePlayer.inactiv = game.playerOne
                 console.log("Its player one turn")
             } else {
                 console.log("Its player two turn")
-                game.activePlayer.test = game.playerTwo
+                game.activePlayer.activ = game.playerOne
+                game.activePlayer.inactiv = game.playerTwo
             }
         }
     })();
@@ -84,22 +87,22 @@ const game = (()=> {
                 checkSubset(playerMarkerPosition, winningConditions.winSeven) ||
                 checkSubset(playerMarkerPosition, winningConditions.winEight) 
             ){
-                console.log(`${playerName} won `)
-                resetGame();
+                console.log(`${game.activePlayer.inactiv.playerName} won `)
+                gameFlow()
             } else {
                 gameFlow();
             }
         }
 
-        function resetGame(){
+        const resetGame = function(){
             gameboard.board = ["","","","","","","","",""];
             playerName = "";
             playerMarkerPosition.length = 0;
             console.log(gameboard.board);
-        }
+        };
 
         return {
-            playerName, playerMarker, setMarker, 
+            playerName, playerMarker, setMarker, resetGame
         }
     }   
 
@@ -111,7 +114,7 @@ const game = (()=> {
     const playerTwo = createPlayer("Charly", "O")
 
     return {
-        playerOne, playerTwo, gameboard, activePlayer
+        playerOne, playerTwo, gameboard, activePlayer, gameFlow
     }
 })();
 
@@ -120,28 +123,56 @@ const renderGame = (()=>  {
     const gameboardDiv = document.createElement("div");
     gameboardDiv.classList.add("gameboard")
     body.appendChild(gameboardDiv);
-    const renderGameBoard = (()=> {
+
+
+    function renderGameBoard(){
         for(let i = 0; i < 9; i++){
             const div = document.createElement("div");
             gameboardDiv.appendChild(div)
             div.classList.add("gameboardDiv");
             div.addEventListener("click", () => {
-                if (game.activePlayer.test == game.playerTwo){
-                    game.playerOne.setMarker(i + 1);
-                    div.textContent = `${game.activePlayer.test.playerMarker}`
-                    test()
-                } else{
+                if (game.activePlayer.activ == game.playerOne){
                     game.playerTwo.setMarker(i + 1);
-                    div.textContent = `${game.activePlayer.test.playerMarker}`
-                    console.log(game.playerOne)
-                    test();
+                    div.textContent = `${game.activePlayer.activ.playerMarker}`
+                } else{
+                    game.playerOne.setMarker(i + 1);
+                    div.textContent = `${game.activePlayer.activ.playerMarker}`
                 }
                 
             });   
         };
-    })();
+    };
+
+    const playerOneName = document.getElementById("nameOne");
+    const playerTwoName = document.getElementById("nameTwo");
+    const form = document.querySelector(".form")
+    const startGame = document.querySelector(".start");
+    const resetGameButton = document.querySelector(".reset")
+    startGame.addEventListener("click", ()=> {
+        game.playerOne.playerName = playerOneName.value;
+        console.log(playerOneName.value)
+        game.playerTwo.playerName = playerTwoName.value;
+        console.log(playerTwoName.value)
+        if (playerOneName.value.length != 0 && playerTwoName.value.length != 0){
+            renderGameBoard();
+        } else {
+            return
+        }
+        form.reset();
+        
+        playerOneName.value = "";
+        playerTwoName.value = "";
+    })
+    resetGameButton.addEventListener("click", ()=>{
+        game.playerOne.resetGame();
+        game.playerTwo.resetGame();
+        game.gameFlow();
+        while (gameboardDiv.firstChild) {
+            gameboardDiv.removeChild(gameboardDiv.firstChild);
+        }
+
+    })
 })();
 
-function test(){
-    console.log(game.activePlayer.test)
-}
+
+

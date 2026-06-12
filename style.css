@@ -4,6 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    gap: 20px;
 }
 
 .gameboard{
@@ -20,4 +21,12 @@ body {
     border: solid 1px black;
     width: 100px;
     height: 100px;
+}
+
+.controls{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
 }
